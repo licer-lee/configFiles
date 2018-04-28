@@ -1,0 +1,27 @@
+
+# tomcat 安装到服务器后，常用配置：
+1. 修改tomcat-users.xml, 启用用户管理
+  
+  <role rolename="tomcat"/>
+	<role rolename="role1"/>
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-status"/>
+	<user username="tomcat" password="xxx" roles="tomcat"/>
+	<user username="both" password="xxx" roles="tomcat,role1"/>
+	<user username="role1" password="xxx" roles="role1"/>
+	<user username="deploy" password="xxx" roles="manager-status,manager-gui,manager-script"/>
+
+2. 启用远程管理
+  2.1 在conf/Catalina/localhost新增manager.xml（测试可用）
+  
+<?xml version="1.0" encoding="UTF-8"?>
+<Context privileged="true" antiResourceLocking="false"  docBase="${catalina.home}/webapps/manager">  
+     <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />  
+</Context>
+2.2 或在webapps/manager/META-INF/context.xml中：（未测试）
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+  修改为：
+   <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+
